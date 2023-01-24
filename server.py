@@ -1,16 +1,19 @@
 import sqlite3
 import socket
+import tcp_by_size
 
 IP = '0.0.0.0'
 PORT = 8888
 def handle_client_msg(request):
-    
+    data = cli_sock.recv()
+    req_code = data[4]
 
 def login(cli_sock):
+    recv_data = handle_client_msg(request).decode()
 
 def handle_client(cli_sock,i,addr):
     print(f'client #{i} connected from {addr}')
-    login 
+    login(cli_sock)
 
 def main():
     threads = []
