@@ -2,6 +2,7 @@ import tkinter as tk
 import os
 USER = ''
 PASS = ''
+LOGGED = False
 
 
 class LoginScreen(tk.Frame):
@@ -38,6 +39,7 @@ class LoginScreen(tk.Frame):
 
         # Pack the frame
         self.pack()
+
     def validate_credentials(self,username,password):
         print(f'recv {username}, {password}')
         # Check that username is not empty
@@ -66,6 +68,7 @@ class LoginScreen(tk.Frame):
         return True, ""
 
     def login(self):
+        global LOGGED
         # Get the username or email and password values and perform login logic here
         username_or_email = self.username_or_email.get()
         password = self.password.get()
@@ -73,12 +76,21 @@ class LoginScreen(tk.Frame):
 
         if valid:
             print(f"Logging in with username or email {username_or_email} and password {password}")
+            error_label = tk.Label(self, text="LOGGING IN", font=("Arial", 14))
+            error_label.grid(row=3, column=0, padx=10, pady=10, rowspan=3, columnspan=3)
+            LOGGED = True
+            self.after(2000, lambda: New_Window())
 
         else:
-            error_label = tk.Label(self, text=error, font=("Arial", 14))
+            """error_label = tk.Label(self, text=error, font=("Arial", 14))
             error_label.grid(row=3, column=0, padx=10, pady=10, rowspan=3, columnspan=3)
             # Add the following line to remove the error message after 2 seconds
-            self.after(2000, lambda: error_label.destroy())
+            self.after(2000, lambda: error_label.destroy())"""
+            tk.messagebox.showerror()
+
+    def clear_frame(self):
+        for widgets in self.winfo_children():
+            widgets.destroy()
 
     def set_user(self, username_or_email):
         self.username_or_email.set(username_or_email)
@@ -92,6 +104,16 @@ class LoginScreen(tk.Frame):
     def get_password(self):
         return self.password.get()
 
+class MainScreen(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.username_or_email = tk.StringVar()
+        self.password = tk.StringVar()
+        self.create_widgets()
+
+    def create_widgets(self):
+
 
 def main():
     root = tk.Tk()
@@ -99,6 +121,7 @@ def main():
     login_screen = LoginScreen(root)
     login_screen.set_user("enter you username or email")
     login_screen.set_password("enter your password")
+
     root.mainloop()
     
     user = login_screen.get_user()
